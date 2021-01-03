@@ -1,0 +1,76 @@
+﻿@model 購物車實作.ViewModels.ItemViewModel
+
+@{
+    ViewBag.Title = "商品首頁";
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<h2>商品項目</h2>
+<table>
+    @if(!Model.IdList.Count.Equals(0))
+    {
+        int row = Convert.ToInt32(Math.Ceiling(
+            Convert.ToDouble(Model.IdList.Count) / 5));
+        for(int r = 0; r < row; r++)
+        {
+            <tr>
+                @for (int i = 5 * r; i < (r + 1) * 5; i++)
+                {
+                    if(i < Model.IdList.Count)
+                    {
+                        <td id="ItemBlock-@(Model.IdList[i])">
+                            @Html.Partial("ItemBlock", Model.ItemBlock[i])
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan= "4">尚有商品未上架</td>
+        </tr>
+    }
+    <tr>
+        <td>
+            @if(Model.Paging.NowPage >1)
+            {
+                @Html.ActionLink("<<","Index",new { Page = 1})
+                @Html.ActionLink("<","Index", new { Page = Model.Paging.NowPage - 1 })
+            }
+        </td>
+        <td>
+            @for(var page =(Model.Paging.NowPage - 6);page < (Model.Paging.MaxPage + 6);page++)
+            {
+                if ((page > 0) && (page <= Model.Paging.MaxPage))
+                {
+                    if (page == Model.Paging.NowPage)
+                    {
+                        <b>@page</b>
+                    }
+                    else
+                    {
+                        @Html.ActionLink(page.ToString(), "Index", new { Page = page })
+                    }
+                }
+            }
+        </td>
+        <td>
+            @if (Model.Paging.NowPage < Model.Paging.MaxPage)
+            {
+                @Html.ActionLink(">", "Index", new { Page = Model.Paging.NowPage + 1 })
+                @Html.ActionLink(">>", "Index", new { Page = Model.Paging.MaxPage})
+            }
+        </td>
+        <td></td>
+    </tr>
+</table>
+@if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <a href="@Url.Action("Create")">
+        <input type="button" value="新增商品"/>
+    </a>
+}

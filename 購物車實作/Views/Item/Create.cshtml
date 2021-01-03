@@ -1,0 +1,45 @@
+﻿@model 購物車實作.ViewModels.ItemCreateViewModel
+
+@{
+    ViewBag.Title = "新增商品";
+}
+@section Scripts
+{
+    @Scripts.Render("~/Bundels/Jqueryval")
+}
+<h2>新增商品</h2>
+@using (Html.BeginForm("Add", "Item", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+<table>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.NewData.Name)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.NewData.Name)
+            @Html.ValidationMessageFor(Model => Model.NewData.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.NewData.Price)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.NewData.Price)
+            @Html.ValidationMessageFor(Model => Model.NewData.Price)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.ItemImage)
+        </td>
+        <td>
+            @*<input type="file" name="Image" id="ItemImage"/>*@
+            @Html.TextBoxFor(model => model.ItemImage, new { type = "file" })
+            @Html.ValidationMessageFor(Model => Model.ItemImage)
+        </td>
+    </tr>
+</table>
+<input type="submit" value="商品上架" />
+}

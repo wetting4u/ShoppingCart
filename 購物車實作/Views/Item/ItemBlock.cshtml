@@ -1,0 +1,39 @@
+﻿@model 購物車實作.ViewModels.ItemDetailViewModel
+
+<table>
+    <tr>
+        <td>
+            <img wodth="100" src="@Html.Encode(Url.Content("~/Upload" + Model.Data.Image))"
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.ActionLink(Model.Data.Name, "Item", new { Id = Model.Data.Id })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (Model.InCart)
+                {
+                    <text>已經於購物車中了，從購物車中</text>
+                    @*使用Ajax Helper輔助方法呼叫CartController中的Pop Action*@
+                    @Ajax.ActionLink("取出", "Pop", "Cart", new { Id = Model.Data.Id, toPage = "ItemBlock" }
+               , new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ItemBlock-" + Model.Data.Id })
+                }
+                else
+                {
+                    @*使用Ajax Helper輔助方法呼叫CartController中的Pop Action*@
+                    @Ajax.ActionLink("取出", "Pop", "Cart", new { Id = Model.Data.Id, toPage = "ItemBlock" }
+               , new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ItemBlock-" + Model.Data.Id })
+                }
+            }
+            else
+            {
+                <text>要使用購物車請先</text>
+                @Html.ActionLink("登入", "Login", "Members")
+            }
+        </td>
+    </tr>
+</table>
